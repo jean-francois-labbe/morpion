@@ -1,0 +1,7 @@
+#include "board.h"
+
+int createBoard(int a)
+{
+  return a;
+  
+}

@@ -28,8 +28,14 @@ int putPiece(int x, int y,int player)
   
   if(x<WIDTH && x>=0 && y<HEIGHT && y >=0)
     {
-      Board[x][y]=player;
-      result=0;
+      if(getBoardCell(x,y)==EMPTY)
+        {
+          Board[x][y]=player;
+          result=0;
+        }else 
+        {
+          result=1;
+        }
     }
   else
     {

@@ -1,0 +1,12 @@
+        -:    0:Source:../src/gameManager.c
+        -:    0:Graph:gameManager.gcno
+        -:    0:Data:gameManager.gcda
+        -:    0:Runs:2
+        -:    0:Programs:1
+        -:    1:#include "gameManager.h"
+        -:    2:
+function _Z5rulesi called 2 returned 100% blocks executed 100%
+        2:    3:int rules(int var){
+        2:    4:  return var;
+        -:    5:}
+        -:    6:

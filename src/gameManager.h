@@ -1,7 +1,9 @@
 #ifndef GAME_MANAGER_H_
 #define GAME_MANAGER_H
 
-int rules(int var);
-
+int checkGameStatus();
+int changePlayer();
+int getPlayer();
+int initPlayer();
 
 #endif

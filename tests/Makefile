@@ -23,11 +23,11 @@ TEST_DIR = unitTests
 CPPFLAGS += -I$(GTEST_DIR)/include -I$(SRC_DIR)
 
 # Flags passed to the C++ compiler.
-CXXFLAGS += -g -Wall -Wextra -fprofile-arcs -ftest-coverage
+CXXFLAGS += -g -Wall -Wextra
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
-TESTS = board_test
+TESTS = unit_tests
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
@@ -39,7 +39,7 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 all : $(TESTS)
 
 clean :
-	rm -f $(TESTS) *.o
+	rm -f $(TESTS) *.o *.gcno *.gcda *~ *.gcov *.xml
 
 # Builds gtest.a and gtest_main.a.
 
@@ -80,9 +80,18 @@ gameManager.o : $(SRC_DIR)/gameManager.c $(SRC_DIR)/gameManager.h $(GTEST_HEADER
 
 gameManager_test.o : $(TEST_DIR)/gameManager_test.c $(SRC_DIR)/board.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/gameManager_test.c
-	
-board_test : board.o board_test.o gtest_main.a  gameManager.o gameManager_test.o
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lgcov -lpthread $^ -o $@
+
+display.o : $(SRC_DIR)/display.c $(SRC_DIR)/display.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/display.c
+
+main.o : $(SRC_DIR)/main.c $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/main.c
+
+unit_tests : board.o board_test.o gtest_main.a  gameManager.o gameManager_test.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
+OXO : board.o gameManager.o display.o main.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 
 execute: 

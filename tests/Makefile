@@ -75,7 +75,13 @@ board.o : $(SRC_DIR)/board.c $(SRC_DIR)/board.h $(GTEST_HEADERS)
 board_test.o : $(TEST_DIR)/board_test.c $(SRC_DIR)/board.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/board_test.c
 
-board_test : board.o board_test.o gtest_main.a
+gameManager.o : $(SRC_DIR)/gameManager.c $(SRC_DIR)/gameManager.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/gameManager.c
+
+gameManager_test.o : $(TEST_DIR)/gameManager_test.c $(SRC_DIR)/board.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/gameManager_test.c
+	
+board_test : board.o board_test.o gtest_main.a  gameManager.o gameManager_test.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lgcov -lpthread $^ -o $@
 
 

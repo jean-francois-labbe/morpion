@@ -1,7 +1,0 @@
-#include "board.h"
-
-#include "gtest/gtest.h"
-
-TEST(BoardTest, CreateBoard) {
-  EXPECT_EQ(1, createBoard(1));
-}

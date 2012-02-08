@@ -23,7 +23,7 @@ TEST_DIR = unitTests
 CPPFLAGS += -I$(GTEST_DIR)/include -I$(SRC_DIR)
 
 # Flags passed to the C++ compiler.
-CXXFLAGS += -g -Wall -Wextra
+CXXFLAGS += -g -Wall -Wextra -fprofile-arcs -ftest-coverage
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
@@ -76,4 +76,8 @@ board_test.o : $(TEST_DIR)/board_test.c $(SRC_DIR)/board.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/board_test.c
 
 board_test : board.o board_test.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lgcov -lpthread $^ -o $@
+
+
+execute: 
+	./board_test.exe --gtest_output=xml:report.xml

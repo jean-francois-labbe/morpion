@@ -16,10 +16,22 @@
 # Where to find user code.
 SRC_DIR = src
 ODIR= obj
-
 SRC =$(wildcard $(SRC_DIR)/*.c)
 OBJ_SRC = $(SRC:.c=.o)
 OBJS = $(patsubst %,$(ODIR)/%,$(OBJ_SRC))
+
+
+GTK_DIR=$(SRC_DIR)/GTK
+GTK_SRC =$(wildcard $(GTK_DIR)/*.c)
+GTK_OBJ = $(GTK_SRC:.c=.o)
+GTK_OBJS = $(patsubst %,$(ODIR)/%,$(GTK_OBJ))
+
+
+COMMANDE_LINE_DIR=$(SRC_DIR)/commandLine
+COMMANDE_LINE_SRC =$(wildcard $(COMMANDE_LINE_DIR)/*.c)
+COMMANDE_LINE_OBJ = $(COMMANDE_LINE_SRC:.c=.o)
+COMMANDE_LINE_OBJS = $(patsubst %,$(ODIR)/%,$(COMMANDE_LINE_OBJ))
+
 
 SRC_WITHOUTMAIN=$(subst $(SRC_DIR)/main.c,,$(SRC) )
 OBJ_SRC_WITHOUTMAIN = $(SRC_WITHOUTMAIN:.c=.o)
@@ -34,7 +46,7 @@ OBJ_TEST = $(TESTS_SRC:.c=.o)
 OBJS_TEST = $(patsubst %,$(ODIR)/%,$(OBJ_TEST))
 
 # Flags passed to the preprocessor.
-CPPFLAGS += -I$(SRC_DIR) -I$(GTEST_DIR)/include
+CPPFLAGS += -I$(SRC_DIR) -I$(GTEST_DIR)/include  `pkg-config --libs --cflags gtk+-2.0`
 
 # Flags passed to the C++ compiler.
 CXXFLAGS += -g -Wall -Wextra
@@ -47,7 +59,7 @@ GAME=OXO
 all : $(GAME)
 
 clean :
-	rm -f $(GAME) $(TESTS) $(OBJS) $(OBJS_TEST) *.gcno *.gcda *~ *.gcov *.xml *.o
+	rm -f $(GAME) $(GAME)_GTK  $(TESTS) $(OBJS) $(OBJS_TEST) *.gcno *.gcda *~ *.gcov *.xml *.o
 
 
 # Builds gtest.a and gtest_main.a.
@@ -85,7 +97,13 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 $(ODIR)/%.o : %.c
 	g++ $(CPPFLAGS) $(CXXFLAGS) -o $@ -c $<
 
-$(GAME): $(OBJS)
+$(GAME): $(OBJS) $(COMMANDE_LINE_OBJS)
+	@echo "Build Game"
+	g++ $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	@echo ""
+	@echo "Finished"
+
+$(GAME)_GTK: $(OBJS) $(GTK_OBJS)
 	@echo "Build Game"
 	g++ $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 	@echo ""

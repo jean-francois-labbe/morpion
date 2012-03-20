@@ -50,7 +50,7 @@ CPPFLAGS += -I$(SRC_DIR) -I$(GTEST_DIR)/include  `pkg-config --libs --cflags gtk
 
 # Flags passed to the C++ compiler.
 CXXFLAGS += -g -Wall -Wextra
-
+CXXFLAGS_TESTS+=-fprofile-arcs -ftest-coverage
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
 TESTS = unit_tests
@@ -95,7 +95,7 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
                 $(GTEST_DIR)/include/gtest/internal/*.h
 
 $(ODIR)/%.o : %.c
-	g++ $(CPPFLAGS) $(CXXFLAGS) -o $@ -c $<
+	g++ $(CPPFLAGS) $(CXXFLAGS) $(CXXFLAGS_TESTS) -o $@ -c $<
 
 $(GAME): $(OBJS) $(COMMANDE_LINE_OBJS)
 	@echo "Build Game"
@@ -113,7 +113,7 @@ unit_tests : $(GTEST_DIR)/gtest_main.a $(OBJS_WITHOUTMAIN) $(OBJS_TEST)
 	@echo ""
 	@echo "Build unit tests"
 	@echo ""	
-	g++ $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	g++ $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@ -lgcov
 	@echo ""
 	@echo "Finished"
 
